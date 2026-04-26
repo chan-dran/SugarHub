@@ -1,8 +1,13 @@
-flask==2.2.5
+Flask==2.2.5
 gunicorn
 numpy==1.23.5
 pillow
 mysql-connector-python
-tensorflow==2.13.0
-keras==2.13.1
-requests
+tensorflow==2.10.1
+keras==2.10.0
+h5py
+protobuf==3.19.6
+werkzeug==2.2.3
+itsdangerous
+Jinja2
+click
