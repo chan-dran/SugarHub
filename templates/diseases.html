@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sugarcane Diseases | SweetCaneHub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background:#f4f6f9;
+        }
+
+        /* TOP BLUE HEADER */
+        .header{
+            background:#0b4ea2;
+            color:white;
+            padding:40px 60px;
+        }
+
+        .header-top{
+            display:flex;
+            justify-content:space-between;
+            flex-wrap:wrap;
+        }
+
+        .header-left h1{
+            font-size:28px;
+            margin-bottom:10px;
+        }
+
+        .header-left p{
+            font-size:14px;
+            margin-bottom:20px;
+        }
+
+        .search-box input{
+            padding:10px 18px;
+            width:300px;
+            border:none;
+            border-radius:20px;
+            outline:none;
+        }
+
+        .alphabet{
+            margin-top:10px;
+        }
+
+        .alphabet span{
+            display:inline-block;
+            background:#1f5bbf;
+            margin:4px;
+            padding:6px 10px;
+            border-radius:50%;
+            font-size:12px;
+            cursor:pointer;
+        }
+
+        .alphabet span:hover{
+            background:#4CAF50;
+        }
+
+        /* DISEASE GRID */
+        .container{
+            padding:40px 60px;
+            display:grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap:20px;
+        }
+
+        .card{
+            background:white;
+            border-radius:8px;
+            box-shadow:0 2px 8px rgba(0,0,0,0.08);
+            padding:15px;
+            text-align:center;
+            transition:0.3s;
+        }
+
+        .card:hover{
+            transform:translateY(-5px);
+        }
+
+        .card img{
+            width:100%;
+            height:140px;
+            object-fit:cover;
+            border-radius:6px;
+            margin-bottom:10px;
+        }
+
+        .card h3{
+            font-size:15px;
+            color:#0b4ea2;
+            margin-bottom:5px;
+        }
+
+        .card p{
+            font-size:12px;
+            color:#555;
+        }
+
+        .footer{
+            text-align:center;
+            padding:15px;
+            background:#0b4ea2;
+            color:white;
+            font-size:13px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+
+    <div class="header-top">
+
+        <div class="header-left">
+            <h1>🌿 Diseases & Conditions</h1>
+            <p>Easy-to-understand information about sugarcane diseases.</p>
+
+          
+        </div>
+
+        <div>
+            <p><strong>Find diseases by first letter</strong></p>
+            <div class="alphabet">
+                <span>A</span><span>B</span><span>C</span><span>D</span>
+                <span>E</span><span>F</span><span>G</span><span>H</span>
+                <span>I</span><span>J</span><span>K</span><span>L</span>
+                <span>M</span><span>N</span><span>O</span><span>P</span>
+                <span>Q</span><span>R</span><span>S</span><span>T</span>
+                <span>U</span><span>V</span><span>W</span><span>X</span>
+                <span>Y</span><span>Z</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- DISEASE CARDS -->
+<div class="container">
+<div class="card">
+    <img src="{{ url_for('static', filename='Images/reddot.jpg') }}">
+    <h3>Red Rot</h3>
+    <p>Red stalk interior, yellow leaves.</p>
+</div>
+
+<div class="card">
+    <img src="{{ url_for('static', filename='Images/smut.jpg') }}">
+    <h3>Smut</h3>
+    <p>Black whip structure on plant.</p>
+</div>
+
+<div class="card">
+    <img src="{{ url_for('static', filename='Images/leaf scalat.jpeg') }}">
+    <h3>Leaf Scald</h3>
+    <p>White streaks and leaf drying.</p>
+</div>
+
+<div class="card">
+    <img src="{{ url_for('static', filename='Images/rust.jpeg') }}">
+    <h3>Rust</h3>
+    <p>Brown/orange powdery spots.</p>
+</div>
+
+<div class="card">
+    <img src="{{ url_for('static', filename='Images/grassy.jpg') }}">
+    <h3>Grassy Shoot</h3>
+    <p>Thin grassy leaves, no cane.</p>
+</div>
+
+<div class="card">
+    <img src="{{ url_for('static', filename='Images/wilt.jpeg') }}">
+    <h3>Wilt</h3>
+    <p>Leaf drying and internal damage.</p>
+</div>
+
+<div class="card">
+    <img src="{{ url_for('static', filename='Images/pookah.jpeg') }}">
+    <h3>Pokkah Boeng</h3>
+    <p>Twisted leaves and distortion.</p>
+</div>
+
+<div class="card">
+    <img src="{{ url_for('static', filename='Images/eye.jpg') }}">
+    <h3>Eye Spot</h3>
+    <p>Oval lesions with yellow halo.</p>
+</div>
+
+<div class="card">
+    <img src="{{ url_for('static', filename='Images/mosiac.jpeg') }}">
+    <h3>Mosaic</h3>
+    <p>Green patchy leaf pattern.</p>
+</div>
+
+<div class="card">
+    <img src="{{ url_for('static', filename='Images/yellow.jpeg') }}">
+    <h3>Yellow Leaf Disease</h3>
+    <p>Midrib yellowing, low yield.</p>
+</div>
+    
+
+<div class="footer">
+    © 2026 SweetCaneHub 🌿
+</div>
+
+</body>
+</html>

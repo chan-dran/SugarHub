@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SweetCaneHub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* BACKGROUND IMAGE */
+        body {
+            background: url("{{ url_for('static', filename='Images/S1.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        /* DARK OVERLAY */
+        .overlay{
+            background: rgba(0,0,0,0.65);
+            min-height:100vh;
+            width:100%;
+        }
+
+        /* CONTAINER */
+        .container{
+            width:85%;
+            max-width:1200px;
+            margin:40px auto;
+        }
+
+        /* NAVBAR */
+        .navbar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:20px 60px;
+            background:transparent;
+            color:white;
+        }
+
+        .logo{
+            font-size:22px;
+            font-weight:bold;
+            color:#4CAF50;
+        }
+
+        .nav-links a{
+            text-decoration:none;
+            margin-left:25px;
+            color:white;
+            font-size:14px;
+            transition:0.3s;
+        }
+
+        .nav-links a:hover{
+            color:#4CAF50;
+        }
+
+        /* CATEGORY BAR */
+.categories{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;        /* allows next line instead of stretching */
+    gap:20px;              /* reduced from 60px */
+    padding:20px;
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(6px);
+}
+
+.category{
+    text-align:center;
+    cursor:pointer;
+    color:white;
+    width:110px;           /* controls spacing neatly */
+}
+
+.category img{
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+.category p{
+    margin-top:6px;        /* slightly reduced */
+    font-size:13px;
+}
+
+        /* HERO SECTION */
+        .hero{
+            position:relative;
+            border-radius:15px;
+            overflow:hidden;
+            height:350px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:white;
+        }
+
+        .hero::before{
+            content:"";
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:url("{{ url_for('static', filename='Images/sugarcane.jpeg') }}") center/cover no-repeat;
+            filter:blur(6px);
+            transform:scale(1.1);
+            z-index:1;
+        }
+
+        .hero::after{
+            content:"";
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:rgba(76,175,80,0.6);
+            z-index:2;
+        }
+
+        .hero-text{
+            position:relative;
+            z-index:3;
+            width:80%;
+        }
+
+        .hero-text h1{
+            font-size:38px;
+            margin-bottom:15px;
+        }
+
+        .hero-text p{
+            font-size:16px;
+            max-width:500px;
+        }
+
+        /* PROMO SECTION */
+        .promo{
+            display:flex;
+            gap:20px;
+        }
+
+        .promo-card{
+            flex:1;
+            border-radius:15px;
+            padding:40px;
+            color:white;
+            position:relative;
+            overflow:hidden;
+            display:flex;
+            align-items:center;
+            min-height:220px;
+        }
+
+        .promo-card::before{
+            content:"";
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background-size:cover;
+            background-position:center;
+            filter:brightness(0.6);
+            z-index:1;
+        }
+
+        .promo-card div{
+            position:relative;
+            z-index:2;
+        }
+
+        .promo1::before{
+            background-image:url("{{ url_for('static', filename='Images/monitor.jpg') }}");
+        }
+
+        .promo2::before{
+            background-image:url("{{ url_for('static', filename='Images/prevention.jpeg') }}");
+        }
+
+        /* PRODUCTS */
+        .products{
+            width:85%;
+            max-width:1200px;
+            margin:40px auto;
+            color:white;
+        }
+
+        .products h2{
+            margin-bottom:20px;
+        }
+
+        .product-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+            gap:20px;
+        }
+
+        .product-card{
+            background:rgba(255,255,255,0.1);
+            backdrop-filter:blur(8px);
+            padding:20px;
+            border-radius:15px;
+            text-align:center;
+            transition:0.3s ease;
+            cursor:pointer;
+            color:white;
+        }
+
+        .product-card:hover{
+            transform:translateY(-8px);
+            box-shadow:0 10px 25px rgba(0,0,0,0.4);
+        }
+
+        .product-card img{
+            width:100%;
+            height:140px;
+            object-fit:cover;
+            border-radius:10px;
+            margin-bottom:10px;
+        }
+
+        .footer{
+            background:rgba(0,0,0,0.7);
+            color:white;
+            text-align:center;
+            padding:20px;
+            margin-top:40px;
+        }
+
+        /* RESPONSIVE */
+        @media(max-width:768px){
+            .promo{
+                flex-direction:column;
+            }
+
+            .hero-text{
+                text-align:center;
+            }
+
+            .navbar{
+                padding:15px 20px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="overlay">
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">SweetCaneHub 🌿</div>
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/about">About Us</a>
+        <a href="/diseases">Disease Info</a>
+        <a href="/upload">Image Analysis</a>
+        <a href="/contact">Contact</a>
+    </div>
+</div>
+
+<!-- CATEGORY BAR -->
+<!-- CATEGORY BAR -->
+<div class="categories">
+
+    <div class="category">
+        <img src="{{ url_for('static', filename='Images/healthy.jpg') }}">
+        <p>Healthy Leaves</p>
+    </div>
+
+    <div class="category">
+        <img src="{{ url_for('static', filename='Images/diseased.jpeg') }}">
+        <p>Diseased Leaves</p>
+    </div>
+
+    <div class="category">
+        <img src="{{ url_for('static', filename='Images/analysis.jpeg') }}">
+        <p>AI Analysis</p>
+    </div>
+
+    <div class="category">
+        <img src="{{ url_for('static', filename='Images/report.jpeg') }}">
+        <p>Reports</p>
+    </div>
+
+    <div class="category">
+        <img src="{{ url_for('static', filename='Images/soil.jpeg') }}">
+        <p>Soil Condition Analysis</p>
+    </div>
+
+    <div class="category">
+        <img src="{{ url_for('static', filename='Images/fertilizer.jpeg') }}">
+        <p>Fertilizer Recommendation</p>
+    </div>
+
+    <div class="category">
+        <img src="{{ url_for('static', filename='Images/pest.jpeg') }}">
+        <p>Pest Detection</p>
+    </div>
+
+</div>
+
+
+<!-- HERO -->
+<div class="container">
+    <div class="hero">
+        <div class="hero-text">
+            <h1>Everything You Need for Healthy Sugarcane Farming</h1>
+            <p>
+                AI-powered sugarcane leaf disease detection system that helps farmers identify plant health instantly and take proper action.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- PROMO -->
+<div class="container">
+    <div class="promo">
+        <div class="promo-card promo1">
+            <div>
+                <h3>Pure & Natural Crop Monitoring</h3>
+                <p>Advanced AI detection model</p>
+            </div>
+        </div>
+
+        <div class="promo-card promo2">
+            <div>
+                <h3>Early Disease Identification</h3>
+                <p>Prevent crop loss effectively</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PRODUCTS -->
+<div class="products">
+    <h2>Explore Our AI Services</h2>
+
+    <div class="product-grid">
+        <div class="product-card">
+            <img src="{{ url_for('static', filename='Images/upload.jpeg') }}">
+            <h4>Leaf Upload</h4>
+            <p>Upload image for detection</p>
+        </div>
+
+        <div class="product-card">
+            <img src="{{ url_for('static', filename='Images/prediction.jpeg') }}">
+            <h4>Prediction History</h4>
+            <p>Track past results</p>
+        </div>
+
+        <div class="product-card">
+            <img src="{{ url_for('static', filename='Images/treatment.jpeg') }}">
+            <h4>Treatment Suggestions</h4>
+            <p>Recommended solutions</p>
+        </div>
+
+        <div class="product-card">
+            <img src="{{ url_for('static', filename='Images/dataset.jpeg') }}">
+            <h4>Disease Dataset</h4>
+            <p>Model training information</p>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+    © 2026 SweetCaneHub | AI Based Sugarcane Leaf Disease Detection System
+</div>
+
+</div>
+
+</body>
+</html>

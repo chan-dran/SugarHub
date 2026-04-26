@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prediction History - SweetCaneHub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: url("{{ url_for('static', filename='Images/S1.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .overlay {
+            background: rgba(0, 0, 0, 0.6);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+            color: white;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            margin-left: 25px;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #4CAF50;
+        }
+
+        /* HISTORY */
+        .history-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .history-box {
+            width: 95%;
+            max-width: 1000px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        .history-box h2 {
+            text-align: center;
+            color: white;
+            margin-bottom: 25px;
+        }
+
+        .table-wrapper {
+            max-height: 350px;
+            overflow-y: auto;
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255,255,255,0.95);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #4CAF50;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+        img {
+            width: 100px;
+            border-radius: 6px;
+        }
+
+        .no-data {
+            text-align: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .back-btn {
+            display: block;
+            width: 150px;
+            margin: 20px auto;
+            padding: 10px;
+            background: #4CAF50;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: #3e8e41;
+        }
+
+        /* CHART */
+        .chart-container {
+            margin-top: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 15px;
+            background-color: rgba(0,0,0,0.7);
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="overlay">
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">SweetCaneHub 🌿</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/upload">Image Analysis</a>
+            <a href="/history">History</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+
+    <!-- History Section -->
+    <div class="history-container">
+        <div class="history-box">
+
+            <h2>Your Prediction History</h2>
+
+            {% if predictions and predictions|length > 0 %}
+            <div class="table-wrapper">
+                <table>
+                    <tr>
+                        <th>Image</th>
+                        <th>Result</th>
+                        <th>Confidence (%)</th>
+                    </tr>
+
+                    {% for p in predictions %}
+                    <tr>
+                        <td><img src="{{ p.image_path }}"></td>
+                        <td>{{ p.result }}</td>
+                        <td>{{ p.confidence }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+            <!-- Chart -->
+            <div class="chart-container">
+                <canvas id="myChart"></canvas>
+            </div>
+
+            <!-- ✅ Clean JSON Data -->
+            <script id="chart-data" type="application/json">
+            {
+                "labels": {{ labels | tojson }},
+                "values": {{ values | tojson }}
+            }
+            </script>
+
+            {% else %}
+                <p class="no-data">No predictions found.</p>
+            {% endif %}
+
+            <a href="/upload" class="back-btn">Back</a>
+
+        </div>
+    </div>
+
+    <div class="footer">
+        © 2026 SweetCaneHub | Developed for Sugarcane Leaf Disease Identification
+    </div>
+
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const chartElement = document.getElementById("chart-data");
+
+if (chartElement) {
+    const chartData = JSON.parse(chartElement.textContent);
+
+    new Chart(document.getElementById('myChart'), {
+        type: 'bar',
+        data: {
+            labels: chartData.labels,
+            datasets: [{
+                label: 'Prediction Count',
+                data: chartData.values,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard - SweetCaneHub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: url("{{ url_for('static', filename='Images/S1.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .overlay {
+            background: rgba(0,0,0,0.80);
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            color: white;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .logout-btn {
+            background: red;
+            border: none;
+            padding: 8px 18px;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* TITLE */
+        .dashboard-title {
+            text-align: center;
+            color: white;
+            margin-top: 20px;
+        }
+
+        .dashboard-title span {
+            color: #4CAF50;
+        }
+
+        /* CARDS */
+        .card-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px 30px;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+            width: 220px;
+            backdrop-filter: blur(6px);
+        }
+
+        .card h2 {
+            color: #4CAF50;
+            font-size: 28px;
+        }
+
+        /* TABLE BOX */
+        .table-box {
+            background: rgba(255,255,255,0.12);
+            margin: 40px auto;
+            width: 90%;
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(6px);
+            color: white;
+        }
+
+        /* SCROLLABLE TABLE WRAPPER */
+        .table-wrapper {
+            max-height: 300px;   /* 👈 Adjust height here */
+            overflow-y: auto;
+            margin-top: 15px;
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0,0,0,0.4);
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            text-align: center;
+            color: white;
+        }
+
+        th {
+            background: #4CAF50;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+        tr:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        img {
+            width: 80px;
+            border-radius: 8px;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 30px;
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="overlay">
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div class="logo">SweetCaneHub 🌿 Admin</div>
+        <a href="/adminlogout"><button class="logout-btn">Logout</button></a>
+    </div>
+
+    <!-- TITLE -->
+    <div class="dashboard-title">
+        <h1>Admin <span>Dashboard</span></h1>
+        <p>Monitor Users, Login Activity & Predictions</p>
+    </div>
+
+    <!-- STATS CARDS -->
+    <div class="card-container">
+        <div class="card">
+            <h2>{{ users|length }}</h2>
+            <p>Total Registered Users</p>
+        </div>
+
+        <div class="card">
+            <h2>{{ logs|length }}</h2>
+            <p>Total Login Attempts</p>
+        </div>
+
+        <div class="card">
+            <h2>{{ predictions|length }}</h2>
+            <p>Total Predictions</p>
+        </div>
+    </div>
+
+    <!-- USERS TABLE -->
+    <div class="table-box">
+        <h2>📋 Registered Users</h2>
+        <div class="table-wrapper">
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                </tr>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.email }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <!-- LOGIN LOGS TABLE -->
+    <div class="table-box">
+        <h2>🕒 Login History</h2>
+        <div class="table-wrapper">
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                    <th>Login Time</th>
+                </tr>
+                {% for log in logs %}
+                <tr>
+                    <td>{{ log.id }}</td>
+                    <td>{{ log.email }}</td>
+                    <td>{{ log.login_time }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <!-- PREDICTIONS TABLE -->
+    <div class="table-box">
+        <h2>🌿 All Prediction History</h2>
+        <div class="table-wrapper">
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>User Email</th>
+                    <th>Image</th>
+                    <th>Result</th>
+                    <th>Confidence (%)</th>
+                </tr>
+                {% for p in predictions %}
+                <tr>
+                    <td>{{ p.id }}</td>
+                    <td>{{ p.email }}</td>
+                    <td><img src="{{ p.image_path }}"></td>
+                    <td>{{ p.result }}</td>
+                    <td>{{ p.confidence }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        © 2026 SweetCaneHub | Developed for Sugarcane Leaf Disease Identification
+    </footer>
+
+</div>
+
+</body>
+</html>

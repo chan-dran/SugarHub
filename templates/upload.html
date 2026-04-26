@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SweetCaneHub - Image Analysis</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+background: url("{{ url_for('static', filename='Images/S1.jpg') }}");
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+}
+
+.overlay{
+background: rgba(0,0,0,0.55);
+min-height:100vh;
+width:100%;
+display:flex;
+flex-direction:column;
+}
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 60px;
+color:white;
+}
+
+.logo{
+font-size:24px;
+font-weight:bold;
+color:#4CAF50;
+}
+
+.nav-links a{
+text-decoration:none;
+color:white;
+margin-left:25px;
+font-size:15px;
+transition:0.3s;
+}
+
+.nav-links a:hover{
+color:#4CAF50;
+}
+
+.container{
+width:85%;
+margin:40px auto;
+background:white;
+padding:40px;
+border-radius:15px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+h2{
+color:#2e7d32;
+margin-bottom:20px;
+}
+
+input[type="file"]{
+padding:8px;
+}
+
+button{
+padding:10px 25px;
+background-color:#4CAF50;
+color:white;
+border:none;
+border-radius:25px;
+cursor:pointer;
+}
+
+button:hover{
+background-color:#3e8e41;
+}
+
+.error-box{
+background:#ffebee;
+color:#c62828;
+padding:15px;
+border-radius:8px;
+margin-bottom:20px;
+text-align:center;
+font-weight:bold;
+}
+
+.success-box{
+background:#e8f5e9;
+color:#2e7d32;
+padding:15px;
+border-radius:8px;
+margin-bottom:20px;
+text-align:center;
+font-weight:bold;
+}
+
+.preview-image{
+display:block;
+margin:30px auto;
+width:80%;
+max-width:900px;
+height:350px;
+object-fit:cover;
+border-radius:15px;
+border:4px solid #4CAF50;
+}
+
+.result-section{
+margin-top:40px;
+}
+
+.result-card{
+background:#f9f9f9;
+padding:30px;
+border-radius:12px;
+margin-bottom:30px;
+border-left:6px solid #4CAF50;
+}
+
+.result-row{
+display:flex;
+justify-content:space-between;
+margin-bottom:15px;
+font-size:17px;
+}
+
+.label{
+font-weight:bold;
+}
+
+.value{
+font-weight:600;
+}
+
+.severity-badge{
+padding:6px 18px;
+border-radius:30px;
+color:white;
+font-weight:bold;
+font-size:14px;
+}
+
+.mild{background:#fbc02d;}
+.moderate{background:#fb8c00;}
+.severe{background:#d32f2f;}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+table th, table td{
+border:1px solid #ddd;
+padding:12px;
+text-align:center;
+}
+
+table th{
+background:#2e7d32;
+color:white;
+}
+
+.info-box{
+margin-top:30px;
+line-height:1.7;
+background:#f5f5f5;
+padding:20px;
+border-radius:10px;
+}
+
+.ai-box{
+margin-top:40px;
+background:#eef7ee;
+padding:20px;
+border-radius:10px;
+}
+
+.weather-box{
+margin-top:20px;
+background:#e3f2fd;
+padding:15px;
+border-radius:10px;
+}
+
+#ai-answer{
+margin-top:15px;
+padding:15px;
+background:#ffffff;
+border-radius:8px;
+border:1px solid #ddd;
+min-height:40px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="overlay">
+
+<div class="navbar">
+<div class="logo">SweetCaneHub 🌿</div>
+<div class="nav-links">
+<a href="/">Home</a>
+<a href="/upload">Image Analysis</a>
+<a href="/history">Acc History</a>
+<a href="/more">More</a>
+<a href="/logout">Logout</a>
+</div>
+</div>
+
+<div class="container">
+
+<h2>Upload Sugarcane Leaf Image</h2>
+
+{% if error %}
+<div class="error-box">{{ error }}</div>
+{% endif %}
+
+{% if prediction %}
+<div class="success-box">Image Successfully Analyzed</div>
+{% endif %}
+
+<form action="/predict" method="POST" enctype="multipart/form-data">
+<input type="file" name="image" accept="image/*" required>
+<br><br>
+<button type="submit">Analyze Leaf</button>
+</form>
+
+{% if image_path and not error %}
+<img src="{{ image_path }}" class="preview-image">
+{% endif %}
+
+{% if prediction and not error %}
+
+<div class="result-section">
+
+<div class="result-card">
+<h2>Detection Summary</h2>
+
+<div class="result-row">
+<span class="label">Predicted Disease:</span>
+<span class="value">{{ prediction }}</span>
+</div>
+
+<div class="result-row">
+<span class="label">Model Confidence:</span>
+<span class="value">{{ confidence }}%</span>
+</div>
+
+</div>
+
+<h2>Disease Information</h2>
+
+<div class="info-box">
+<p>{{ description }}</p>
+
+{% if treatment %}
+<h3>Treatment / Cure</h3>
+<p>{{ treatment }}</p>
+{% endif %}
+</div>
+
+{% if weather_info %}
+<div class="weather-box">
+<h2>Season & Weather Info</h2>
+<p>{{ weather_info }}</p>
+</div>
+{% endif %}
+
+<!-- AI CHAT SECTION -->
+
+<div class="ai-box">
+
+<h2>Ask AI about Sugarcane 🌿</h2>
+
+<input type="text"
+id="question"
+placeholder="Ask about disease treatment or farming tips..."
+style="width:70%; padding:10px;">
+
+<button onclick="askAI()">Ask</button>
+
+<div id="ai-answer"></div>
+
+</div>
+
+</div>
+
+{% endif %}
+
+</div>
+</div>
+
+<script>
+
+function askAI(){
+
+let question=document.getElementById("question").value;
+
+if(question.trim()===""){
+document.getElementById("ai-answer").innerText="Please enter a question.";
+return;
+}
+
+document.getElementById("ai-answer").innerText="AI is thinking...";
+
+fetch("/ask_ai",{
+method:"POST",
+headers:{
+"Content-Type":"application/x-www-form-urlencoded"
+},
+body:"question="+encodeURIComponent(question)
+})
+
+.then(response=>response.json())
+
+.then(data=>{
+document.getElementById("ai-answer").innerText=data.answer;
+})
+
+.catch(error=>{
+document.getElementById("ai-answer").innerText="AI error. Please try again.";
+console.error(error);
+});
+
+}
+
+</script>
+
+</body>
+</html>
